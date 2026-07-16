@@ -1,13 +1,420 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>wakil-ai</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-  </body>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wakil AI Dashboard</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      background: #f5f7fb;
+      overflow: hidden;
+    }
+
+    .container {
+      display: flex;
+      height: 100vh;
+    }
+
+    /* Sidebar */
+
+    .sidebar {
+      width: 260px;
+      background: #111827;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+    }
+
+    .logo {
+      font-size: 28px;
+      font-weight: bold;
+      text-align: center;
+      padding: 30px;
+      border-bottom: 1px solid rgba(255, 255, 255, .1);
+    }
+
+    .menu {
+      list-style: none;
+    }
+
+    .menu li {
+      padding: 18px 30px;
+      cursor: pointer;
+      transition: .3s;
+    }
+
+    .menu li:hover {
+      background: #2563eb;
+    }
+
+    .menu li.active {
+      background: #2563eb;
+    }
+
+    /* Main */
+
+    .main {
+      flex: 1;
+      overflow-y: auto;
+    }
+
+    /* Header */
+
+    .header {
+      height: 80px;
+      background: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 40px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, .08);
+    }
+
+    .search {
+      width: 350px;
+    }
+
+    .search input {
+      width: 100%;
+      padding: 12px;
+      border-radius: 8px;
+      border: 1px solid #ddd;
+    }
+
+    .profile {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .avatar {
+      width: 45px;
+      height: 45px;
+      border-radius: 50%;
+      background: #2563eb;
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-weight: bold;
+    }
+
+    /* Content */
+
+    .content {
+      padding: 35px;
+    }
+
+    h1 {
+      margin-bottom: 25px;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 25px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 15px;
+      padding: 25px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, .08);
+      transition: .3s;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+    }
+
+    .card h2 {
+      color: #2563eb;
+      font-size: 34px;
+    }
+
+    .card p {
+      color: #666;
+      margin-top: 10px;
+    }
+
+    /* Sections */
+
+    .section {
+      margin-top: 35px;
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 25px;
+    }
+
+    .panel {
+      background: white;
+      border-radius: 15px;
+      padding: 25px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, .08);
+    }
+
+    /* Table */
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+
+    th,
+    td {
+      padding: 15px;
+      text-align: left;
+    }
+
+    th {
+      background: #2563eb;
+      color: white;
+    }
+
+    tr:nth-child(even) {
+      background: #f7f7f7;
+    }
+
+    button {
+      background: #2563eb;
+      color: white;
+      border: none;
+      padding: 10px 18px;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #1d4ed8;
+    }
+
+    /* Right Panel */
+
+    .activity {
+      margin-top: 20px;
+    }
+
+    .activity div {
+      padding: 15px;
+      margin-bottom: 12px;
+      border-left: 5px solid #2563eb;
+      background: #f5f7fb;
+      border-radius: 8px;
+    }
+
+    /* Quick Buttons */
+
+    .actions {
+      margin-top: 30px;
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .action {
+      background: #2563eb;
+      color: white;
+      padding: 15px 25px;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: .3s;
+    }
+
+    .action:hover {
+      background: #1d4ed8;
+    }
+
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #2563eb;
+      border-radius: 10px;
+    }
+  </style>
+
+</head>
+
+<body>
+
+  <div class="container">
+
+    <div class="sidebar">
+
+      <div class="logo">
+        ⚖ Wakil AI
+      </div>
+
+      <ul class="menu">
+
+        <li class="active">🏠 Dashboard</li>
+        <li>📄 Charge Sheets</li>
+        <li>📑 OCR Documents</li>
+        <li>🤖 AI Analysis</li>
+        <li>⚖ BNS / IPC Search</li>
+        <li>📚 Judgements</li>
+        <li>👨‍💼 Clients</li>
+        <li>📊 Reports</li>
+        <li>📁 Uploads</li>
+        <li>⚙ Settings</li>
+
+      </ul>
+
+    </div>
+
+    <div class="main">
+
+      <div class="header">
+
+        <div class="search">
+          <input type="text" placeholder="Search Cases...">
+        </div>
+
+        <div class="profile">
+          🔔
+          <div class="avatar">
+            PG
+          </div>
+        </div>
+
+      </div>
+
+      <div class="content">
+
+        <h1>Welcome Back 👋</h1>
+
+        <div class="cards">
+
+          <div class="card">
+            <h2>135</h2>
+            <p>Total Cases</p>
+          </div>
+
+          <div class="card">
+            <h2>98</h2>
+            <p>OCR Completed</p>
+          </div>
+
+          <div class="card">
+            <h2>57</h2>
+            <p>AI Analysis</p>
+          </div>
+
+          <div class="card">
+            <h2>12</h2>
+            <p>Pending Reviews</p>
+          </div>
+
+        </div>
+
+        <div class="actions">
+
+          <div class="action">Upload Chargesheet</div>
+
+          <div class="action">OCR PDF</div>
+
+          <div class="action">Analyze Case</div>
+
+          <div class="action">Generate Report</div>
+
+        </div>
+
+        <div class="section">
+
+          <div class="panel">
+
+            <h2>Recent Cases</h2>
+
+            <table>
+
+              <tr>
+                <th>Case</th>
+                <th>Client</th>
+                <th>Status</th>
+                <th>Action</th>
+              </tr>
+
+              <tr>
+                <td>CR001</td>
+                <td>Rahul Sharma</td>
+                <td>Open</td>
+                <td><button>View</button></td>
+              </tr>
+
+              <tr>
+                <td>CR002</td>
+                <td>ABC Pvt Ltd</td>
+                <td>Review</td>
+                <td><button>View</button></td>
+              </tr>
+
+              <tr>
+                <td>CR003</td>
+                <td>Amit Patil</td>
+                <td>Closed</td>
+                <td><button>View</button></td>
+              </tr>
+
+              <tr>
+                <td>CR004</td>
+                <td>Riya Singh</td>
+                <td>Open</td>
+                <td><button>View</button></td>
+              </tr>
+
+              <tr>
+                <td>CR005</td>
+                <td>Mahesh Rao</td>
+                <td>Pending</td>
+                <td><button>View</button></td>
+              </tr>
+
+            </table>
+
+          </div>
+
+          <div class="panel">
+
+            <h2>Recent Activity</h2>
+
+            <div class="activity">
+
+              <div>✔ Chargesheet uploaded successfully.</div>
+
+              <div>🤖 AI completed legal analysis.</div>
+
+              <div>📄 OCR Process Finished.</div>
+
+              <div>⚖ Hearing scheduled for tomorrow.</div>
+
+              <div>📊 Report generated.</div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</body>
+
 </html>
