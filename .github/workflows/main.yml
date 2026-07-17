@@ -6,36 +6,29 @@ on:
       - main
 
 jobs:
-
   build:
-
     runs-on: ubuntu-latest
 
     steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
 
-    - name: Checkout Code
-      uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
 
+      - name: Install Dependencies
+        run: npm install
 
-    - name: Setup Node
-      uses: actions/setup-node@v4
-      with:
-        node-version: 20
+      - name: Build React App
+        run: npm run build
 
-
-    - name: Install Dependencies
-      run: npm install
-
-
-    - name: Build React App
-      run: npm run build
-
-
-    - name: Deploy to EC2
-      uses: appleboy/scp-action@v0.1.7
-      with:
-        host: ${{ secrets.EC2_HOST }}
-        username: ec2-user
-        key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
-        source: "dist/*"
-        target: "/var/www/html"
+      - name: Copy Files to EC2
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ubuntu
+          key: ${{ secrets.EC2_SSH_KEY }}
+          source: "dist/*"
+          target: "/home/ubuntu/dist"
